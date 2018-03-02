@@ -6,7 +6,6 @@ module.exports = function getZerosCount(number, base) {
     ];
     var p = [];
     var a = [];
-    var sa = [];
     var wholeBase = base;
     var nextPrimeIndex = 0;
     while (wholeBase > 1) {
@@ -14,7 +13,6 @@ module.exports = function getZerosCount(number, base) {
             nextPrimeIndex++;
         }
         p.push(allPrimes[nextPrimeIndex]);
-        sa.push(0);
         var pow = 0;
         while (wholeBase % allPrimes[nextPrimeIndex] == 0) {
             pow++;
@@ -23,19 +21,17 @@ module.exports = function getZerosCount(number, base) {
         a.push(pow);
     }
 
-    for (var i = 2; i <= number; ++i) {
-        var tmp = i;
-        for (var j = 0; j < p.length; ++j) {
-            while (tmp % p[j] == 0) {
-                tmp /= p[j];
-                sa[j]++;
-            }
-        }
-    }
+    var zeroNumber = number;
 
-    var zeroNumber = Math.floor(sa[0] / a[0]);
-    for (var i = 0; i < a.length; i++) {
-        zeroNumber = Math.min(zeroNumber, Math.floor(sa[i] / a[i]));
+    for (var i = 0; i < p.length; ++i) {
+        var sa = 0;
+        var numberForDevide = number;
+
+        while (numberForDevide / p[i] > 0) {
+            sa += Math.floor(numberForDevide/p[i]);
+            numberForDevide = Math.floor(numberForDevide/p[i]);
+        }
+        zeroNumber = Math.floor(Math.min(zeroNumber, sa/a[i]));
     }
 
     return zeroNumber;
